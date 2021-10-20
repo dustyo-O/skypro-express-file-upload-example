@@ -8,17 +8,27 @@ const port = 3000;
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    console.log('destination');
-    console.log(file);
     const id = uuidv4();
 
-    fs.mkdirSync(path.resolve(__dirname, 'files', id));
+    let destPath;
 
-    cb(null, path.resolve('files', id));
+    do {
+      destPath = path.resolve(__dirname, 'files', id);
+    } while(fs.existsSync(destPath));
+
+    fs.mkdirSync(destPath);
+
+    const fileData = {
+      filename: file.originalname,
+      mimetype: file.mimetype,
+    };
+
+    fs.writeFileSync(path.resolve(destPath, 'index.json'), JSON.stringify(fileData, null, 4), 'utf8');
+
+    cb(null, destPath);
   },
   filename: function (req, file, cb) {
-    console.log('filename');
-    console.log(file);
+
     cb(null, file.originalname);
   }
 });
