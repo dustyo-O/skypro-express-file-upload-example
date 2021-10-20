@@ -49,6 +49,19 @@ app.post('/upload', upload.single('filepond'), (req, res) => {
   res.send({ status: 'ok', id: req.uploadedFileId });
 });
 
+app.get('/d/:id', (req, res) => {
+  const id = req.params.id;
+
+  const destPath = path.resolve(__dirname, 'files', id);
+  const indexJsonPath = path.resolve(destPath, 'index.json');
+
+  const fileData = fs.readFileSync(indexJsonPath);
+
+  const filename = JSON.parse(fileData).filename;
+
+  res.download(path.resolve(destPath, filename));
+});
+
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
 });
