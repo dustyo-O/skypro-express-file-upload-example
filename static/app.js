@@ -1,7 +1,7 @@
 const pond = FilePond.create({
   multiple: false,
   name: 'filepond',
-  server: "/upload"
+  server: "/upload/file"
 });
 
 pond.on('processfile', (e, file) => {
