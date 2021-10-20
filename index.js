@@ -8,13 +8,16 @@ const port = 3000;
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    const id = uuidv4();
+    let id;
 
     let destPath;
 
     do {
+      id = uuidv4();
       destPath = path.resolve(__dirname, 'files', id);
     } while(fs.existsSync(destPath));
+
+    req.uploadedFileId = id;
 
     fs.mkdirSync(destPath);
 
@@ -43,7 +46,7 @@ app.get('/ping', (req, res) => {
 });
 
 app.post('/upload', upload.single('filepond'), (req, res) => {
-  res.send('upload');
+  res.send({ status: 'ok', id: req.uploadedFileId });
 });
 
 app.listen(port, () => {
