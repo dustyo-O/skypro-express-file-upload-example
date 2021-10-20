@@ -3,6 +3,8 @@ const multer = require('multer');
 const fs = require('fs');
 const path = require('path');
 const { v4: uuidv4 } = require('uuid');
+const pug = require('pug');
+
 const app = express();
 const port = 3000;
 
@@ -38,7 +40,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-app.use('/', express.static('static'));
+app.use('/static', express.static('static'));
 app.use('/filepond', express.static('node_modules/filepond/dist'));
 
 app.get('/ping', (req, res) => {
@@ -60,6 +62,14 @@ app.get('/d/:id', (req, res) => {
   const filename = JSON.parse(fileData).filename;
 
   res.download(path.resolve(destPath, filename));
+});
+
+app.get('/', (req, res) => {
+  const indexFunction = pug.compileFile('templates/index.pug');
+
+  const indexHtml = indexFunction();
+
+  res.send(indexHtml);
 });
 
 app.listen(port, () => {

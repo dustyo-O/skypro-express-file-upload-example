@@ -15,6 +15,7 @@
     "express": "^4.17.1",
     "filepond": "^4.30.3",
     "multer": "^1.4.3",
+    "pug": "^3.0.2",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
